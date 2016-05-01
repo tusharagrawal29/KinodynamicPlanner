@@ -62,7 +62,7 @@ if __name__ == "__main__":
         robot.SetActiveManipulator('right_wam')
     else:
         robot.SetActiveManipulator('left_wam')
- 
+
     robot.controller = openravepy.RaveCreateController(robot.GetEnv(), 'IdealController')
     robot.ikmodel = openravepy.databases.inversekinematics.InverseKinematicsModel(robot, iktype=openravepy.IkParameterization.Type.Transform6D)
     if not robot.ikmodel.load():
@@ -72,7 +72,6 @@ if __name__ == "__main__":
     resolution = [args.hres, args.hres, args.tres]
     herb = HerbRobot(env, robot, args.manip)
     arm_env = HerbEnvironment(herb)
-    # arm_env = None
     herb_base = SimpleRobot(env, robot)
     base_env = SimpleEnvironment(herb_base, resolution)
 
