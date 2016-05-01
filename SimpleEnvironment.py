@@ -24,6 +24,7 @@ class SimpleEnvironment(object):
 
         self.resolution = resolution
         self.ConstructActions()
+        self.saved_transform = None
         # self.PlotActionFootprints(0)
 
     def GenerateFootprintFromControl(self, start_config, control, stepsize=0.01):
@@ -82,7 +83,12 @@ class SimpleEnvironment(object):
         pl.ion()
         pl.show()
 
-        
+    def SaveTransform(self):
+        self.saved_transform = self.robot.GetTransform()
+
+    def LoadTransform(self):
+        with self.robot.GetEnv():
+            self.robot.SetTransform(self.saved_transform)
 
     def ConstructActions(self):
 
@@ -118,7 +124,6 @@ class SimpleEnvironment(object):
             # tdot = self.herb.wheel_radius * (omega_l - omega_r) / self.herb.wheel_distance
             
     def CheckCollision(self, config):
-        original_H = self.robot.GetTransform()
         H = numpy.identity(4)
         angle = config[2]
         H[0:2,0:2] = numpy.array([[numpy.cos(angle), -numpy.sin(angle)], [numpy.sin(angle), numpy.cos(angle)]])
@@ -126,8 +131,6 @@ class SimpleEnvironment(object):
         with self.robot.GetEnv():
             self.robot.SetTransform(H)
         ret = self.robot.GetEnv().CheckCollision(self.robot)
-        with self.robot.GetEnv():
-            self.robot.SetTransform(original_H)
         return ret
 
 

@@ -29,6 +29,7 @@ class AStarPlanner(object):
         motion_cost = {start_id: 0}
         plan = []
         i = start_id
+        self.planning_env.SaveTransform()
         while True:
             successors = self.planning_env.GetSuccessors(i)
             for (j, j_action) in successors:
@@ -56,6 +57,7 @@ class AStarPlanner(object):
                 break
             i = heappop(expand)[1]
 
+        self.planning_env.LoadTransform()
         while not goal_id == None and not self.nodes[goal_id] == None:
             print goal_id
             (goal_id, action) = self.nodes[goal_id]
